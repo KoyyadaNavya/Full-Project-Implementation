@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Product Listing</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Product List</h1>
+
+  <div>
+    <label>Filter by Category:
+      <select id="categoryFilter" onchange="renderProducts()">
+        <option value="">All</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Books">Books</option>
+      </select>
+    </label>
+
+    <label>Sort by:
+      <select id="sortOption" onchange="renderProducts()">
+        <option value="name">Name</option>
+        <option value="price">Price</option>
+      </select>
+    </label>
+  </div>
+
+  <div id="productContainer"></div>
+
+  <script>
+    const products = [
+      { name: "Laptop", price: 900, category: "Electronics" },
+      { name: "Smartphone", price: 600, category: "Electronics" },
+      { name: "Book A", price: 20, category: "Books" },
+      { name: "Book B", price: 15, category: "Books" }
+    ];
+
+    function renderProducts() {
+      const container = document.getElementById('productContainer');
+      const category = document.getElementById('categoryFilter').value;
+      const sort = document.getElementById('sortOption').value;
+
+      let filtered = [...products];
+      if (category) {
+        filtered = filtered.filter(p => p.category === category);
+      }
+
+      if (sort === 'price') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      }
+
+      container.innerHTML = '';
+      filtered.forEach(product => {
+        const div = document.createElement('div');
+        div.className = 'product-card';
+        div.innerHTML = `<h3>${product.name}</h3><p>$${product.price}</p><p>${product.category}</p>`;
+        container.appendChild(div);
+      });
+    }
+
+    window.onload = renderProducts;
+  </script>
+</body>
+</html>
